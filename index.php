@@ -1,17 +1,26 @@
 <?php
-    require_once  ("Connection/connection.php");
-    $sql = "SELECT * FROM zutaten";
+    include  ("Connection/connection.php");
+    $s = $_GET['p1'];
+    $sql = "SELECT * FROM zutaten WHERE ZID =".$s ;
     $result = mysqli_query($conn, $sql);
-
+    session_start();
     
+    $zutaten = $_SESSION["zutaten"];
+    if (!$zutaten){
+        $zutaten=array();
+    }
+
+
    if ($result->num_rows > 0) {
     // output data of each row
     while($row = $result->fetch_assoc()) {
-        echo "id: " . $row["ZID"]. " - Name: " . $row["name"]. "<br>";
+        array_push($zutaten,$row["name"]);
     }
 } else {
     echo "0 results";
 }
+$_SESSION["zutaten"]=$zutaten;
+print_r($zutaten);
 ?>
 
 <!DOCTYPE html>
@@ -35,8 +44,8 @@
     <!---- Hier ist die Menüleiste--->
     <nav id="navigation" class="clearfix">
         <ul>
-            <li><a href="startseite.cshtml">Startseite</a></li>
-            <li><a href="favoriten.cshtml">Favoriten</a></li>
+            <li><a href="index.php">Startseite</a></li>
+            <li><a href="favoriten.php">Favoriten</a></li>
             <li><a href="einkaufsliste">Einkaufliste</a></li>
             <li><a href="cocktailliste">Cocktail-Liste</a></li>
             <li><a href="#">Log-In</a></li>
@@ -47,23 +56,9 @@
 
 
     <!---- Hier ist die Kategorieauswahl--->
-    <button class="buttoncategory" onclick="location.href='Auswahlkategorien/category_level1.cshtml'">Zutaten hinzufügen +</button>
+    <button class="buttoncategory" onclick="location.href='Auswahlkategorien/category_level1.php'">Zutaten hinzufügen +</button>
     <!---- Hier endet die Kategorieauswahl--->
-    @*<!---- Suchfeld--->
 
-    
-        <input type="text" name="search" list="search" id="searchfield">
-
-            <datalist id="search">    
-                @foreach( var row in data){
-                 <option value="@row.Name"></option>
-                }
-            </datalist>
-        </input>
-
-        <button id="btnName">Click me!</button>
-   
-    <!---- Suchfeld--->*@ 
 
     </body>
 </html>
