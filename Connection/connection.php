@@ -11,5 +11,5 @@
         die("Database selection failed: " . $conn->connect_error);
     }
 
-    echo "Connected successfully";
+
 ?>
